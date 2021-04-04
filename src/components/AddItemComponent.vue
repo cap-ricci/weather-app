@@ -1,8 +1,13 @@
 <template>
   <div class='add-item'>
     <form @submit.prevent='emitTask'>
-      <input type='text' placeholder='Enter task...' v-model='task' />
-      <button type='submit'>Add Task</button>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Enter task..." v-model='task'
+        aria-label="Enter task..." aria-describedby="basic-addon">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="submit">Add Task</button>
+        </div>
+      </div>
     </form>
   </div>
 </template>

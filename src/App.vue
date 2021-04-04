@@ -1,9 +1,25 @@
 <template>
   <div id='app'>
-    <img alt='Vue logo' src='./assets/logo.png' />
-    <hello-world msg='Welcome to Your Vue.js + TypeScript first App' />
-    <add-item @added='passTask'/>
-    <item-list :addedText='text'/>
+    <div class='alert alert-success alert-dismissible fade show' role='alert'>
+      With Bootstrap!
+      <button
+        type='button'
+        class='close'
+        data-dismiss='alert'
+        aria-label='Close'>
+        <span aria-hidden='true'>&times;</span>
+      </button>
+    </div>
+    <div class='container'>
+      <div class='row justify-content-center'>
+        <div class='col-6 card'>
+          <div class='card-body'>
+            <add-item @added='passTask' />
+            <item-list :addedText='text' />
+          </div>
+        </div>
+    </div>
+    </div>
   </div>
 </template>
 

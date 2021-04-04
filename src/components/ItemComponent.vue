@@ -1,11 +1,9 @@
 <template>
-  <div class='item-list'>
-    <ul>
-      <li v-for='(item, index) in items' :key='index'>
+    <ul class='list-group list-group-flush'>
+      <li class="list-group-item" v-for='(item, index) in items' :key='index'>
         <input type='checkbox' :checked='item.status' /> {{ item.text }}
       </li>
     </ul>
-  </div>
 </template>
 
 <script lang='ts'>
