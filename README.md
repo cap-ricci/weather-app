@@ -1,5 +1,5 @@
-# weather-app
-
+# ~~weather-app~~
+Playground to learn Vue and Typescript. For the moment, just the classic Todo app. 
 ## Project setup
 ```
 npm install
