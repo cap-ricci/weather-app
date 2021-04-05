@@ -1,9 +1,21 @@
 <template>
+<div>
     <ul class='list-group list-group-flush'>
-      <li class="list-group-item" v-for='(item, index) in items' :key='index'>
-        <input type='checkbox' :checked='item.status' /> {{ item.text }}
-      </li>
+      <div v-for='(item, index) in items' :key='index'>
+        <li class="list-group-item" v-if="!item.status">
+        <input type="checkbox" v-model="item.status">
+        <label>{{ item.text }} {{ item.status }}</label>
+      </li></div>
     </ul>
+    <p>Completed:</p>
+    <ul class='list-group list-group-flush'>
+      <div v-for='(item, index) in items' :key='index'>
+        <li class="list-group-item" v-if="item.status">
+        <input type="checkbox" v-model="item.status">
+        <label>{{ item.text }} {{ item.status }}</label>
+      </li></div>
+    </ul>
+</div>
 </template>
 
 <script lang='ts'>
@@ -15,6 +27,8 @@ import Item from '../types/Item';
 @Component
 export default class ItemComponent extends Vue {
   @Prop({ default: () => [] }) items!: Item[];
+
+  @Prop({ default: () => [] }) completed!: Item[];
 
   @Prop() addedText!: string;
 
