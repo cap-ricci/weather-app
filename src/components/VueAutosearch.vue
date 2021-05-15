@@ -225,7 +225,7 @@ import SearchState from '../types/SearchState';
 
 @Component
 export default class VueAutosearch extends Vue {
-   Direction: any = Direction;
+  Direction: any = Direction;
 
   SearchState: any = SearchState;
 
@@ -327,7 +327,8 @@ export default class VueAutosearch extends Vue {
 
   @Emit('update:modelValue')
   updateModelValue(payload: null | Place): string | true | 0 {
-    this.dummy = 'DUMMY';
+    if (payload !== null) this.modelValue = payload;
+    console.log(payload);
     return payload === null || (payload.id && payload.name);
   }
 
