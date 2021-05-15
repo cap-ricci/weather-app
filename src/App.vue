@@ -14,7 +14,7 @@
     <div>selected result: {{ selectedSearchOption }}</div>
     <hr>
     <vue-autosearch
-      v-model="selectedSearchOption"
+      @passOption='showOption'
       :search-function="searchFunction"
       :max-height="400"
     />
@@ -36,6 +36,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import AddItem from './components/AddItemComponent.vue';
 import ItemList from './components/ItemComponent.vue';
 import VueAutosearch from './components/VueAutosearch.vue';
+import Place from './types/Place';
 
 @Component({
   components: {
@@ -47,12 +48,17 @@ import VueAutosearch from './components/VueAutosearch.vue';
 export default class App extends Vue {
   public text = '';
 
-  public selectedSearchOption = null;
+  public selectedSearchOption = '';
 
   public searchTimeout: null | number = null;
 
   public passTask(task: string): void {
     this.text = task;
+  }
+
+  public showOption(option: Place): void {
+    this.selectedSearchOption = option.name;
+    console.log(option);
   }
 
   public searchFunction(searchTerm: string) {

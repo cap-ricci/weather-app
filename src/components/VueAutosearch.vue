@@ -120,7 +120,7 @@
         "autosearch__input--openUp":
           showResults && showResultsDirection === Direction.UP,
       }'
-      :value='modelValue ? modelValue.name : searchTerm'
+      :value='searchTerm'
       :placeholder='placeholder'
       :disabled='disabled'
       @focus='showResults = true'
@@ -204,7 +204,7 @@
           :key='option.id'
           class='autosearch__result__option'
           @mousedown.prevent='
-            $emit("update:modelValue", option);
+            $emit("passOption", option);
             showResults = false;
           '
           >{{ option.name }}</a
