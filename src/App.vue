@@ -56,9 +56,21 @@ export default class App extends Vue {
     this.text = task;
   }
 
+  // requests from frontend (browser) not working: CORS issue
   public showOption(option: Place): void {
     this.selectedSearchOption = option.name;
-    console.log(option);
+    const sitename = 'https://github.com/cap-ricci/weather-app/0.1';
+    const headers = new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'User-Agent': sitename,
+    });
+    const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${option.lat}&lon=${option.lon}`;
+    const compact = fetch(url, {
+      method: 'GET',
+      headers,
+    }).then((data) => data.json());
+    console.log(compact);
   }
 
   public searchFunction(searchTerm: string) {
