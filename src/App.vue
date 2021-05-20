@@ -15,8 +15,8 @@
     <hr>
     <vue-autosearch
       @passOption='showOption'
-      :search-function="searchFunction"
-      :max-height="400"
+      :search-function='searchFunction'
+      :max-height='400'
     />
     <!-- <div class='container'>
       <div class='row justify-content-center'>
@@ -59,19 +59,24 @@ export default class App extends Vue {
   // requests from frontend (browser) not working: CORS issue
   public showOption(option: Place): void {
     this.selectedSearchOption = option.name;
-    // const sitename = 'https://github.com/cap-ricci/weather-app/0.1';
-    // const headers = new Headers({
-    //   Accept: 'application/json',
-    //   'Content-Type': 'application/json',
-    //   'User-Agent': sitename,
+    const url = 'http://localhost:3000/data';
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(option),
+      headers: {
+        'content-type': 'application/json',
+      },
+    }).then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        this.selectedSearchOption = result;
+      });
+    // fetch(url, {
+    //   method: 'GET',
+    // }).then((res) => res.json()).then((json) => {
+    //   console.log(json);
+    //   this.selectedSearchOption = json;
     // });
-    // const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${option.lat}&lon=${option.lon}`;
-    const url = 'http://localhost:3000/test';
-    const compact = fetch(url, {
-      method: 'GET',
-    });
-    // .then((data) => data.json());
-    console.log(compact);
   }
 
   public searchFunction(searchTerm: string) {
