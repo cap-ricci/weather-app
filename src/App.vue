@@ -7,14 +7,15 @@
         type='button'
         class='close'
         data-dismiss='alert'
-        aria-label='Close'>
+        aria-label='Close'
+      >
         <span aria-hidden='true'>&times;</span>
       </button>
     </div>
     <div>selected result: {{ selectedSearchOption }}</div>
-    <hr>
+    <hr />
     <vue-autosearch
-      @passOption='showOption'
+      @passOption='addForecast'
       :search-function='searchFunction'
       :max-height='400'
     />
@@ -36,7 +37,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import AddItem from './components/AddItemComponent.vue';
 import ItemList from './components/ItemComponent.vue';
 import VueAutosearch from './components/VueAutosearch.vue';
-import Place from './types/Place';
+import Place, { isInBufferArea, ZERO_PLACE } from './types/Place';
 
 @Component({
   components: {
@@ -56,27 +57,34 @@ export default class App extends Vue {
     this.text = task;
   }
 
-  // requests from frontend (browser) not working: CORS issue
-  public showOption(option: Place): void {
-    this.selectedSearchOption = option.name;
+  public placeList: Place[] = [];
+
+  public addForecast(option: Place): void {
+    //TODO push selected placed in list, confront new query with selected places
     const url = 'http://localhost:3000/data';
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(option),
-      headers: {
-        'content-type': 'application/json',
-      },
-    }).then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        this.selectedSearchOption = result;
-      });
-    // fetch(url, {
-    //   method: 'GET',
-    // }).then((res) => res.json()).then((json) => {
-    //   console.log(json);
-    //   this.selectedSearchOption = json;
-    // });
+    this.placeList.push(ZERO_PLACE);
+    let isRepeatedRequest = this.placeList
+      .map((element) => isInBufferArea(element, option, 9))
+      .reduce((acc, res) => res || acc, false);
+    if (!isRepeatedRequest) {
+      //fetch..
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(option),
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          this.selectedSearchOption = result;
+        });
+    } else {
+      //error
+      this.selectedSearchOption = 'sorry, this is already requested';
+    }
+    
   }
 
   public searchFunction(searchTerm: string) {

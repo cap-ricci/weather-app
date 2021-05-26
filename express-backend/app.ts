@@ -14,7 +14,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/data', (req, res) => res.send('Received a GET HTTP method'));
+app.get('/', (req, res) => res.send('Received a GET HTTP method'));
 
 app.post('/data', (req, res) => {
   const coord = {

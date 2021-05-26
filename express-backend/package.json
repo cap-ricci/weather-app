@@ -2,10 +2,11 @@
   "name": "express-backend",
   "version": "1.0.0",
   "description": "backend for weather app",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
     "test": "test",
-    "lint": "eslint --fix . --ext .ts"
+    "lint": "eslint --fix . --ext .ts",
+    "start": "tsc && node dist/app.js"
   },
   "author": "cap.ricci",
   "license": "ISC",
