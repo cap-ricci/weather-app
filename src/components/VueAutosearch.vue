@@ -1,3 +1,8 @@
+// search form for nominatim. selected result triggers forecast
+// user input: text
+// output: list of matching nominatim results
+// user input: select result
+// output: coordinates sent to location forecast
 <style>
 .autosearch__wrapper {
   box-sizing: border-box;

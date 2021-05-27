@@ -1,73 +1,48 @@
 /* eslint-disable @typescript-eslint/camelcase */
 <template>
   <div id='app'>
-    <div class='alert alert-success alert-dismissible fade show' role='alert'>
-      With Bootstrap!
-      <button
-        type='button'
-        class='close'
-        data-dismiss='alert'
-        aria-label='Close'
-      >
-        <span aria-hidden='true'>&times;</span>
-      </button>
-    </div>
-    <div>selected result: {{ selectedSearchOption }}</div>
-    <hr />
     <vue-autosearch
       @passOption='addForecast'
       :search-function='searchFunction'
       :max-height='400'
     />
-    <!-- <div class='container'>
-      <div class='row justify-content-center'>
-        <div class='col-6 card'>
-          <div class='card-body'>
-            <add-item @added='passTask' />
-            <item-list :addedText='text' />
-          </div>
-        </div>
-      </div>
-    </div> -->
+    <div v-if="isRepeatedRequest">{{ repeatedRequestMessage }}</div>
+    <div v-for='(item, index) in placeList' :key='index'>
+        <li>{{ item.name }}</li>
+    </div>
+    <!-- <forecast-list/> -->
   </div>
 </template>
 
 <script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator';
-import AddItem from './components/AddItemComponent.vue';
-import ItemList from './components/ItemComponent.vue';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import VueAutosearch from './components/VueAutosearch.vue';
 import Place, { isInBufferArea, ZERO_PLACE } from './types/Place';
 
 @Component({
   components: {
-    'add-item': AddItem,
-    'item-list': ItemList,
     'vue-autosearch': VueAutosearch,
   },
 })
 export default class App extends Vue {
-  public text = '';
+  @Prop({ default: () => [ZERO_PLACE] }) placeList!: Place[];
 
-  public selectedSearchOption = '';
+  public repeatedRequestMessage = 'try with another one!';
+
+  public isRepeatedRequest = false;
 
   public searchTimeout: null | number = null;
 
-  public passTask(task: string): void {
-    this.text = task;
-  }
-
-  public placeList: Place[] = [];
-
   public addForecast(option: Place): void {
-    //TODO push selected placed in list, confront new query with selected places
+    // TODO push selected placed in list, confront new query with selected places
+    this.isRepeatedRequest = false;
     const url = 'http://localhost:3000/data';
-    this.placeList.push(ZERO_PLACE);
-    let isRepeatedRequest = this.placeList
+    this.isRepeatedRequest = this.placeList
       .map((element) => isInBufferArea(element, option, 9))
       .reduce((acc, res) => res || acc, false);
-    if (!isRepeatedRequest) {
-      //fetch..
+    if (!this.isRepeatedRequest) {
+      this.placeList.push(option);
+      // fetch..
       fetch(url, {
         method: 'POST',
         body: JSON.stringify(option),
@@ -80,11 +55,7 @@ export default class App extends Vue {
           console.log(result);
           this.selectedSearchOption = result;
         });
-    } else {
-      //error
-      this.selectedSearchOption = 'sorry, this is already requested';
     }
-    
   }
 
   public searchFunction(searchTerm: string) {
